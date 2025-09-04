@@ -32,6 +32,9 @@ dependencies {
     // AE2
     modCompileOnly(forge.ae2)
 
+    // GTCeu
+    modCompileOnly(forge.gtceu)
+
     // KJS
     modCompileOnly(forge.kubejs)
     modCompileOnly(forge.architectury)
@@ -70,6 +73,7 @@ dependencies {
     modLocalRuntime(forge.ae2)
     modLocalRuntime(forge.spark)
     modLocalRuntime(forge.modernfix)
+    modLocalRuntime(forge.gtceu)
 
     // Runtime Recipe Viewers - uncomment whichever one you want to use //
     modLocalRuntime(forge.emi)

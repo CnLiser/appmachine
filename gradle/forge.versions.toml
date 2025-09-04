@@ -91,7 +91,7 @@ jade                = { module = "maven.modrinth:jade", version.ref = "jade" }
 embeddium           = { module = "maven.modrinth:embeddium", version.ref = "embeddium" }
 oculus              = { module = "maven.modrinth:oculus", version.ref = "oculus" }
 modernfix           = { module = "maven.modrinth:modernfix", version.ref = "modernfix" }
-gtceu               = { module = "com.gregtechceu.gtceu:gtceu-1.20.1-7.1.4", version.ref = "gtceu" }
+gtceu               = { module = "com.gregtechceu.gtceu:gtceu-1.20.1", version.ref = "gtceu" }
 
 
 cc-tweaked-core-api   = { module = "cc.tweaked:cc-tweaked-1.20.1-core-api", version.ref = "ccTweaked" }

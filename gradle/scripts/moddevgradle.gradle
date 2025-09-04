@@ -3,9 +3,9 @@ import org.gradle.internal.os.OperatingSystem
 ext.isJetbrainsRuntime = System.getProperty('java.vm.vendor').contains('JetBrains')
 
 mixin {
-    var refmap = add sourceSets.main, "gtceu.refmap.json"
+    var refmap = add sourceSets.main, "appmachine.refmap.json"
     slimJar.from refmap
-    config 'gtceu.mixins.json'
+    config 'appmachine.mixins.json'
 }
 
 // we have to force LWJGL version 3.3.2, because RenderNurse requires Java 21, and LWJGL 3.3.1 cannot run on Java 21.
