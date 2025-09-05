@@ -1,8 +1,7 @@
-package com.liser.appmachine.mixin;
+package com.liser.appmachine.mixin.gt;
 
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
-import com.gregtechceu.gtceu.integration.ae2.machine.feature.IGridConnectedMachine;
 
 import com.liser.appmachine.api.machine.trait.AESimpleTieredMachine;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;

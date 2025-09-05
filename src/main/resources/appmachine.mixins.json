@@ -6,7 +6,7 @@
   "refmap": "appmachine.refmap.json",
   "plugin": "com.liser.appmachine.mixin.AMMixinPlugin",
   "mixins": [
-    "SimpleTieredMachineMixin"
+    "gt.SimpleTieredMachineMixin"
   ],
   "client": [
 
