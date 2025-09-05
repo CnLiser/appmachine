@@ -1,6 +1,6 @@
 {
   "tab.appmachine.gtceu.covers.title": "格雷科技|更多覆盖板",
-  "item.appmachine.me_input_bus_cover": "ME 输入总线腐败版",
+  "item.appmachine.me_input_bus_cover": "ME 输入总线覆盖板",
   "item.appmachine.me_input_bus_cover.tooltip": "用作§f覆盖板§7时可以将机器覆盖面接入ME网络中。",
   "item.appmachine.me_input_bus_cover.tooltip.item_transfer_rate": "§b传输速率：§f%d物品/s"
 }
