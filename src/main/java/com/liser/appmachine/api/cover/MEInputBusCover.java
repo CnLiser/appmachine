@@ -306,7 +306,7 @@ public class MEInputBusCover extends CoverBehavior implements IControllable, IUI
 
 
     private String getUITitle() {
-        return "cover.me.input.bus.title";
+        return "item.appmachine.me_input_bus_cover";
     }
 
     @Override
@@ -319,7 +319,7 @@ public class MEInputBusCover extends CoverBehavior implements IControllable, IUI
 
         @Override
         public Component getTitle() {
-            return Component.translatable("cover.me.input.bus.title");
+            return Component.translatable("item.appmachine.me_input_bus_cover");
         }
 
         @Override

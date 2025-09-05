@@ -15,11 +15,11 @@ import java.util.function.Supplier;
 public class Covers {
     public static final List<CoverDefinition> ALL_COVERS = new ArrayList<>();
 
-    public final static CoverDefinition ME_INPUT_BUS_COVER = register("me_input_bus", MEInputBusCover::new);
+    public final static CoverDefinition ME_INPUT_BUS_COVER = register("me_input_bus_cover", MEInputBusCover::new);
 
 
     private static CoverDefinition register(String id, CoverDefinition.CoverBehaviourProvider behaviorCreator) {
-        return register(id, behaviorCreator, () -> () -> new SimpleCoverRenderer(GTCEu.id("block/cover/" + id)));
+        return register(id, behaviorCreator, () -> () -> new SimpleCoverRenderer(AppMachine.id("block/cover/" + id)));
     }
 
     public static CoverDefinition register(ResourceLocation id, CoverDefinition.CoverBehaviourProvider behaviorCreator,

@@ -16,12 +16,12 @@ public class CoverItems {
         AMRegistries.REGISTRATE.creativeModeTab(() -> AMCreativeModeTabs.ITEM);
     }
 
-    public static ItemEntry<ComponentItem> ME_INPUT_BUS = AMRegistries.REGISTRATE.item("me_input_bus", ComponentItem::create)
+    public static ItemEntry<ComponentItem> ME_INPUT_BUS = AMRegistries.REGISTRATE.item("me_input_bus_cover", ComponentItem::create)
             .lang("me input bus cover")
             .onRegister(attach(new CoverPlaceBehavior(Covers.ME_INPUT_BUS_COVER)))
             .onRegister(attach(new TooltipBehavior(lines -> {
-                lines.add(Component.translatable("item.gtceu.robot.arm.tooltip"));
-                lines.add(Component.translatable("gtceu.universal.tooltip.item_transfer_rate", 2));
+                lines.add(Component.translatable("item.appmachine.me_input_bus_cover.tooltip"));
+                lines.add(Component.translatable("item.appmachine.me_input_bus_cover.tooltip.item_transfer_rate", 64));
             })))
             .register();
 

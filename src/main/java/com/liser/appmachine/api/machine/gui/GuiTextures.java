@@ -7,6 +7,6 @@ import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 public class GuiTextures {
 
     public static final ResourceTexture ME_INPUT_BUS_ICON = new ResourceTexture(
-            "gtceu:textures/item/me_input_bus_cover.png");
+            "appmachine:textures/item/me_input_bus_cover.png");
 
 }

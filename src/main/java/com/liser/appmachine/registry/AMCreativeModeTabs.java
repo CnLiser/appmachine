@@ -16,7 +16,7 @@ public class AMCreativeModeTabs {
                     .displayItems(new GTCreativeModeTabs.RegistrateDisplayItemsGenerator(AppMachine.MOD_ID,
                             AMRegistries.REGISTRATE))
                      .icon(CoverItems.ME_INPUT_BUS::asStack)
-                    .title(Component.literal("ULV Covers Modern"))
+                    .title(Component.translatable("tab.appmachine.gtceu.covers.title"))
                     .build())
             .register();
 
