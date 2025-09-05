@@ -20,6 +20,7 @@ import appeng.me.helpers.IGridConnectedBlockEntity;
 import lombok.Getter;
 
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -42,8 +43,8 @@ public class GridMachineNodeHolder extends MachineTrait {
 
     public GridMachineNodeHolder(IGridConnectedMachine machine) {
         super(machine.self());
-        // this.directions = new HashSet<>();
-        this.directions = EnumSet.allOf(Direction.class);
+         this.directions = new HashSet<>();
+//        this.directions = EnumSet.allOf(Direction.class);
         this.mainNode = createManagedNode();
     }
 
