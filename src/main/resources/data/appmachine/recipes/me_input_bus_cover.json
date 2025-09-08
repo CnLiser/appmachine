@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xab",
+    "   ",
+    "   "
+  ],
+  "key": {
+    "x": {
+      "item": "ae2:storage_bus"
+    },
+    "a": {
+      "item": "gtceu:storage_cover"
+    },
+    "b": {
+      "item": "minecraft:chest"
+    }
+  },
+  "result": {
+    "item": "appmachine:me_input_bus_cover",
+    "count": 1
+  }
+}
