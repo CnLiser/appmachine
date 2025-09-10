@@ -5,17 +5,16 @@ import com.gregtechceu.gtceu.api.data.chemical.material.info.MaterialFlags;
 import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.gregtechceu.gtceu.utils.FormattingUtil;
 
-import com.liser.appmachine.api.cover.CoverItems;
+import com.liser.appmachine.data.ClientProxy;
+import com.liser.appmachine.data.CommonProxy;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import com.liser.appmachine.data.AMDatagen;
-import com.liser.appmachine.registry.AMCreativeModeTabs;
-import com.liser.appmachine.registry.AMRegistries;
 import com.mojang.logging.LogUtils;
 import org.slf4j.Logger;
 
@@ -36,14 +35,7 @@ public class AppMachine {
 
     public static void init() {
         ConfigHolder.init();
-
-        AMCreativeModeTabs.init();
-
-        CoverItems.init();
-
-        AMDatagen.init();
-
-        AMRegistries.REGISTRATE.registerRegistrate();
+        DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
