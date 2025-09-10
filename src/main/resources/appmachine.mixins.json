@@ -6,10 +6,10 @@
   "refmap": "appmachine.refmap.json",
   "plugin": "com.liser.appmachine.mixin.AMMixinPlugin",
   "mixins": [
+    "gt.CommonProxyMixin",
     "gt.SimpleTieredMachineMixin"
   ],
   "client": [
-
   ],
   "injectors": {
     "defaultRequire": 1
