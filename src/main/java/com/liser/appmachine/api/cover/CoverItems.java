@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Component;
 @SuppressWarnings("null")
 public class CoverItems {
     static {
-        AMRegistries.REGISTRATE.creativeModeTab(() -> AMCreativeModeTabs.ITEM);
+        AMRegistries.REGISTRATE.creativeModeTab(() -> AMCreativeModeTabs.COVER);
     }
 
     public static ItemEntry<ComponentItem> ME_INPUT_BUS = AMRegistries.REGISTRATE.item("me_input_bus_cover", ComponentItem::create)
