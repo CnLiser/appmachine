@@ -1,8 +1,12 @@
 package com.liser.appmachine.mixin.gt;
 
+import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
+import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
 
+import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
+import com.liser.appmachine.api.gui.IFancyUIProvider;
 import com.liser.appmachine.api.machine.trait.AESimpleTieredMachine;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
@@ -16,6 +20,7 @@ import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import lombok.Getter;
 import lombok.Setter;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,7 +30,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Mixin(value = SimpleTieredMachine.class)
-public class SimpleTieredMachineMixin implements AESimpleTieredMachine {
+public abstract class SimpleTieredMachineMixin implements AESimpleTieredMachine, IFancyUIProvider {
 
     @Unique
     @Persisted
@@ -70,4 +75,12 @@ public class SimpleTieredMachineMixin implements AESimpleTieredMachine {
         this.setDirections(new HashSet<>());
         this.getMainNode().setExposedOnSides(directions);
     }
+
+    @Unique
+    public void attachRightConfigurators(ConfiguratorPanel configuratorPanel) {
+        configuratorPanel.attachConfigurators(createAutoOutputItemConfigurator());
+    }
+
+    @Shadow(remap = false)
+    protected abstract IFancyConfigurator createAutoOutputItemConfigurator();
 }
