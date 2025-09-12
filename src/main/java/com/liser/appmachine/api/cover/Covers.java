@@ -16,6 +16,7 @@ public class Covers {
     public static final List<CoverDefinition> ALL_COVERS = new ArrayList<>();
 
     public final static CoverDefinition ME_INPUT_BUS_COVER = register("me_input_bus_cover", MEInputBusCover::new);
+    public final static CoverDefinition ME_NETWORK_COVER = register("me_network_cover", MENetworkCover::new);
 
 
     private static CoverDefinition register(String id, CoverDefinition.CoverBehaviourProvider behaviorCreator) {

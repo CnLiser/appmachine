@@ -25,6 +25,13 @@ public class CoverItems {
             })))
             .register();
 
+    public static ItemEntry<ComponentItem> ME_NETWORK_COVER = AMRegistries.REGISTRATE.item("me_network_cover", ComponentItem::create)
+            .lang("me network cover")
+            .onRegister(attach(new CoverPlaceBehavior(Covers.ME_NETWORK_COVER)))
+            .onRegister(attach(new TooltipBehavior(lines -> {
+                lines.add(Component.translatable("item.appmachine.me_network_cover.tooltip"));
+            })))
+            .register();
 
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
         return item -> item.attachComponents(components);
