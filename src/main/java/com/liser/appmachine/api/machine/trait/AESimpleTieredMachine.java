@@ -4,7 +4,6 @@ import com.gregtechceu.gtceu.integration.ae2.machine.feature.IGridConnectedMachi
 import net.minecraft.core.Direction;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public interface AESimpleTieredMachine extends IGridConnectedMachine {

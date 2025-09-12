@@ -20,6 +20,7 @@ import com.gregtechceu.gtceu.integration.ae2.machine.feature.IGridConnectedMachi
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemSlot;
 import com.gregtechceu.gtceu.utils.GTMath;
 import com.liser.appmachine.api.cover.trait.CoverBehaviorConfigurator;
+import com.liser.appmachine.api.cover.trait.MECover;
 import com.liser.appmachine.api.machine.gui.GuiTextures;
 import com.liser.appmachine.api.machine.gui.widget.AEItemCoverConfigWidget;
 import com.liser.appmachine.api.machine.slot.ExportOnlyCoverAEItemList;
@@ -48,7 +49,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 
 
-public class MEInputBusCover extends CoverBehavior implements IControllable, IUICover, CoverBehaviorConfigurator {
+public class MEInputBusCover extends MECover implements IControllable, IUICover, CoverBehaviorConfigurator {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(MEInputBusCover.class,
             CoverBehavior.MANAGED_FIELD_HOLDER);
@@ -63,10 +64,6 @@ public class MEInputBusCover extends CoverBehavior implements IControllable, IUI
     @Getter
     @Setter
     private boolean workingEnabled = true;
-    @DescSynced
-    @Getter
-    @Setter
-    private boolean isOnline = false;
     @Getter
     @Setter
     protected int tier = 9;
@@ -94,13 +91,6 @@ public class MEInputBusCover extends CoverBehavior implements IControllable, IUI
 
     protected boolean isSubscriptionActive() {
         return isWorkingEnabled() && getMachine().isOnline();
-    }
-
-    public IManagedGridNode getMainNode() {
-        if(!(coverHolder instanceof MachineCoverContainer machineCoverContainer)) return null;
-        MetaMachine machine = machineCoverContainer.getMachine();
-        if(!(machine instanceof IGridConnectedMachine)) return null;
-        return ((IGridConnectedMachine) machine).getMainNode();
     }
 
     private boolean shouldSyncME() {
@@ -178,34 +168,6 @@ public class MEInputBusCover extends CoverBehavior implements IControllable, IUI
     }
 
     @Override
-    public boolean canAttach() {
-        if (!(coverHolder instanceof MachineCoverContainer)) return false;
-
-        MetaMachine machine = ((MachineCoverContainer) coverHolder).getMachine();
-
-        if(!(machine instanceof AESimpleTieredMachine)) return false;
-
-        for (var dir : Direction.values()) {
-            if (coverHolder.hasCover(dir) && coverHolder.getCoverAtSide(dir) instanceof MEInputBusCover) {
-                return false;
-            }
-        }
-        return super.canAttach();
-    }
-
-    @Override
-    public void onAttached(@NotNull ItemStack itemStack, @NotNull ServerPlayer player) {
-        super.onAttached(itemStack, player);
-        if(coverHolder instanceof MachineCoverContainer) {
-            MetaMachine machine = ((MachineCoverContainer) coverHolder).getMachine();
-
-            if(machine instanceof AESimpleTieredMachine) {
-                ((AESimpleTieredMachine) machine).onAttached(EnumSet.of(attachedSide));
-            }
-        }
-    }
-
-    @Override
     public void onLoad() {
         super.onLoad();
         if(coverHolder instanceof MachineCoverContainer) {
@@ -220,6 +182,7 @@ public class MEInputBusCover extends CoverBehavior implements IControllable, IUI
 
     @Override
     public void onRemoved() {
+        super.onRemoved();
         MEStorage networkInv = this.getMachine().getMainNode().getGrid().getStorageService().getInventory();
         for (ExportOnlyAEItemSlot aeSlot : this.aeItemHandler.getInventory()) {
             // return item to AE network
@@ -235,8 +198,6 @@ public class MEInputBusCover extends CoverBehavior implements IControllable, IUI
                 }
             }
         }
-        super.onRemoved();
-        getMachine().onCoverRemove();
         if (subscription != null) {
             subscription.unsubscribe();
         }
