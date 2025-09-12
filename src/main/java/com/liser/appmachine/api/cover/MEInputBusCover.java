@@ -19,6 +19,7 @@ import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.integration.ae2.machine.feature.IGridConnectedMachine;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemSlot;
 import com.gregtechceu.gtceu.utils.GTMath;
+import com.liser.appmachine.api.cover.trait.CoverBehaviorConfigurator;
 import com.liser.appmachine.api.machine.gui.GuiTextures;
 import com.liser.appmachine.api.machine.gui.widget.AEItemCoverConfigWidget;
 import com.liser.appmachine.api.machine.slot.ExportOnlyCoverAEItemList;
@@ -47,7 +48,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 
 
-public class MEInputBusCover extends CoverBehavior implements IControllable, IUICover {
+public class MEInputBusCover extends CoverBehavior implements IControllable, IUICover, CoverBehaviorConfigurator {
 
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(MEInputBusCover.class,
             CoverBehavior.MANAGED_FIELD_HOLDER);
@@ -310,7 +311,7 @@ public class MEInputBusCover extends CoverBehavior implements IControllable, IUI
     }
 
     @Override
-    public @Nullable IFancyConfigurator getConfigurator() {
+    public @Nullable IFancyConfigurator getRightConfigurator() {
         return new MEInputBusCoverConfigurator();
     }
 

@@ -3,9 +3,10 @@ package com.liser.appmachine.mixin.gt;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity;
+import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
 
-import com.gregtechceu.gtceu.api.machine.feature.IFancyUIMachine;
+import com.liser.appmachine.api.cover.trait.CoverBehaviorConfigurator;
 import com.liser.appmachine.api.gui.IFancyUIProvider;
 import com.liser.appmachine.api.machine.trait.AESimpleTieredMachine;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
@@ -78,7 +79,14 @@ public abstract class SimpleTieredMachineMixin implements AESimpleTieredMachine,
 
     @Unique
     public void attachRightConfigurators(ConfiguratorPanel configuratorPanel) {
-        configuratorPanel.attachConfigurators(createAutoOutputItemConfigurator());
+        MetaMachine machine = (SimpleTieredMachine) (Object)this;
+        for (var direction : Direction.values()) {
+            if (machine.getCoverContainer().hasCover(direction)) {
+                var configurator = ((CoverBehaviorConfigurator) machine.getCoverContainer().getCoverAtSide(direction)).getRightConfigurator();
+                if (configurator != null)
+                    configuratorPanel.attachConfigurators(configurator);
+            }
+        }
     }
 
     @Shadow(remap = false)
