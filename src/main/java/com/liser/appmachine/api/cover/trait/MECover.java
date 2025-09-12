@@ -80,6 +80,22 @@ public abstract class MECover extends CoverBehavior {
         }
     }
 
+    public boolean isOnline() {
+        return getMachine().isOnline();
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if(coverHolder instanceof MachineCoverContainer) {
+            MetaMachine machine = ((MachineCoverContainer) coverHolder).getMachine();
+
+            if(machine instanceof AESimpleTieredMachine) {
+                ((AESimpleTieredMachine) machine).onAttached(EnumSet.of(attachedSide));
+            }
+        }
+    }
+
     @Override
     public void onRemoved() {
         super.onRemoved();
