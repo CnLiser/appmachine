@@ -42,4 +42,11 @@ public class FancyMachineUIWidgetMixin extends WidgetGroup {
                     .setSelfPosition(new Position(size.width + 2, getGui().getHeight() - configuratorRightPanel.getSize().height - 4));
         }
     }
+
+    @Inject(method = "clearUI",
+            at = @At(value = "TAIL"),
+            remap = false)
+    protected void onClearUI(CallbackInfo ci) {
+        this.configuratorRightPanel.clear();
+    }
 }
