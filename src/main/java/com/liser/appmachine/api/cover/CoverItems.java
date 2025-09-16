@@ -4,8 +4,6 @@ import com.gregtechceu.gtceu.api.item.ComponentItem;
 import com.gregtechceu.gtceu.api.item.component.IItemComponent;
 import com.gregtechceu.gtceu.common.item.CoverPlaceBehavior;
 import com.gregtechceu.gtceu.common.item.TooltipBehavior;
-import com.liser.appmachine.api.item.CoverSlotBehaviour;
-import com.liser.appmachine.api.item.MEInputBusSlot;
 import com.liser.appmachine.registry.AMCreativeModeTabs;
 import com.liser.appmachine.registry.AMRegistries;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -20,7 +18,7 @@ public class CoverItems {
 
     public static ItemEntry<ComponentItem> ME_INPUT_BUS = AMRegistries.REGISTRATE.item("me_input_bus_cover", ComponentItem::create)
             .lang("me input bus cover")
-            .onRegister(attach(new CoverSlotBehaviour(MEInputBusSlot::loadCoverSlot), new CoverPlaceBehavior(Covers.ME_INPUT_BUS_COVER)))
+            .onRegister(attach(new CoverPlaceBehavior(Covers.ME_INPUT_BUS_COVER)))
             .onRegister(attach(new TooltipBehavior(lines -> {
                 lines.add(Component.translatable("item.appmachine.me_input_bus_cover.tooltip"));
                 lines.add(Component.translatable("item.appmachine.me_input_bus_cover.tooltip.item_transfer_rate"));

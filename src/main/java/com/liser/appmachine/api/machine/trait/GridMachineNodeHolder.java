@@ -44,7 +44,18 @@ public class GridMachineNodeHolder extends MachineTrait {
     public GridMachineNodeHolder(IGridConnectedMachine machine) {
         super(machine.self());
          this.directions = new HashSet<>();
+//        this.directions = EnumSet.allOf(Direction.class);
         this.mainNode = createManagedNode();
+    }
+
+    public GridMachineNodeHolder(IGridConnectedMachine machine, Set<Direction> directions) {
+        super(machine.self());
+        this.directions = directions;
+        this.mainNode = createManagedNode();
+        if (this.machine.getLevel() instanceof ServerLevel serverLevel) {
+            mainNode.destroy();
+            serverLevel.getServer().tell(new TickTask(0, this::createMainNode));
+        }
     }
 
     protected SerializableManagedGridNode createManagedNode() {

@@ -1,7 +1,6 @@
 package com.liser.appmachine.api.cover;
 
 import appeng.api.config.Actionable;
-import appeng.api.networking.IGrid;
 import appeng.api.networking.IManagedGridNode;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.GenericStack;
@@ -15,15 +14,13 @@ import com.gregtechceu.gtceu.api.cover.IUICover;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.MachineCoverContainer;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
+import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
-import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemList;
+import com.gregtechceu.gtceu.integration.ae2.machine.feature.IGridConnectedMachine;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemSlot;
 import com.gregtechceu.gtceu.utils.GTMath;
-import com.liser.appmachine.api.cover.slot.CoverSlot;
 import com.liser.appmachine.api.cover.trait.CoverBehaviorConfigurator;
 import com.liser.appmachine.api.cover.trait.MECover;
-import com.liser.appmachine.api.item.MEInputBusSlot;
 import com.liser.appmachine.api.machine.gui.GuiTextures;
 import com.liser.appmachine.api.machine.gui.widget.AEItemCoverConfigWidget;
 import com.liser.appmachine.api.machine.slot.ExportOnlyCoverAEItemList;
@@ -33,17 +30,16 @@ import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
+import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.Position;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -51,7 +47,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
-import java.util.function.Consumer;
 
 
 public class MEInputBusCover extends MECover implements IControllable, IUICover, CoverBehaviorConfigurator {
@@ -61,40 +56,38 @@ public class MEInputBusCover extends MECover implements IControllable, IUICover,
 
     protected final static int CONFIG_SIZE = 16;
 
-    @Getter
-    protected ExportOnlyAEItemList aeItemHandler;
+    protected ExportOnlyCoverAEItemList aeItemHandler;
     @Getter
     @Persisted
-    private NotifiableItemStackHandler inventory;
+    private final NotifiableItemCoverStackHandler inventory;
     @Persisted
     @Getter
     @Setter
     private boolean workingEnabled = true;
+    @Getter
+    @Setter
+    protected int tier = 9;
     protected final IO io;
     protected TickableSubscription subscription;
+    protected final IActionSource actionSource;
     public final int maxItemTransferRate;
     protected int itemsLeftToTransferLastSecond = 1;
     @Persisted
     @Getter
     protected int transferRate = 1;
-    protected CoverSlot coverSlot;
 
     public MEInputBusCover(@NotNull CoverDefinition definition, @NotNull ICoverable coverHolder, @NotNull Direction attachedSide, Object... args) {
         super(definition, coverHolder, attachedSide);
         this.io = IO.IN;
+        this.inventory = createInventory();
         this.maxItemTransferRate = 64;
         this.transferRate = maxItemTransferRate;
-        if(this.canAttach()) {
-            this.inventory = createInventory();
+        if(getMainNode() != null) {
+            this.actionSource = IActionSource.ofMachine(getMainNode()::getNode);
+        }else {
+            this.actionSource = null;
         }
     }
-
-    @Override
-    public IManagedGridNode getMainNode() {
-        if(this.holder == null) return super.getMainNode();
-        return this.holder.getMainNode();
-    }
-
 
     protected boolean isSubscriptionActive() {
         return isWorkingEnabled() && getMachine().isOnline();
@@ -109,14 +102,12 @@ public class MEInputBusCover extends MECover implements IControllable, IUICover,
     }
 
     protected void update() {
-        if(this.aeItemHandler == null) return;
         if (!this.isWorkingEnabled()) return;
         if (!this.shouldSyncME()) return;
 
         if (this.updateMEStatus()) {
             this.syncME();
         }
-
 
         long timer = this.coverHolder.getOffsetTimer();
         if (timer % 5 == 0) {
@@ -135,8 +126,7 @@ public class MEInputBusCover extends MECover implements IControllable, IUICover,
 
     /////////////////////////////////
     // ********** Sync ME *********//
-
-    /// //////////////////////////////
+    /////////////////////////////////
 
     protected void syncME() {
         MEStorage networkInv = this.getMachine().getMainNode().getGrid().getStorageService().getInventory();
@@ -166,8 +156,8 @@ public class MEInputBusCover extends MECover implements IControllable, IUICover,
         }
     }
 
-    protected NotifiableItemStackHandler createInventory(Object... args) {
-        this.aeItemHandler = new ExportOnlyAEItemList((MetaMachine) this.getMachine(), CONFIG_SIZE);
+    protected NotifiableItemCoverStackHandler createInventory(Object... args) {
+        this.aeItemHandler = new ExportOnlyCoverAEItemList(coverDefinition, coverHolder, attachedSide, CONFIG_SIZE);
         return this.aeItemHandler;
     }
 
@@ -180,10 +170,10 @@ public class MEInputBusCover extends MECover implements IControllable, IUICover,
     @Override
     public void onLoad() {
         super.onLoad();
-        if (coverHolder instanceof MachineCoverContainer) {
+        if(coverHolder instanceof MachineCoverContainer) {
             MetaMachine machine = ((MachineCoverContainer) coverHolder).getMachine();
 
-            if (machine instanceof AESimpleTieredMachine) {
+            if(machine instanceof AESimpleTieredMachine) {
                 ((AESimpleTieredMachine) machine).onAttached(EnumSet.of(attachedSide));
             }
         }
@@ -192,53 +182,27 @@ public class MEInputBusCover extends MECover implements IControllable, IUICover,
 
     @Override
     public void onRemoved() {
-        IGrid grid = this.getMachine().getMainNode().getGrid();
-        if(grid != null) {
-            for (ExportOnlyAEItemSlot aeSlot : this.aeItemHandler.getInventory()) {
-                // return item to AE network
-                GenericStack stock = aeSlot.getStock();
-                if (stock != null) {
-                    long total = stock.amount();
-                    long inserted = grid.getStorageService().getInventory().insert(stock.what(), stock.amount(), Actionable.MODULATE,
-                            this.actionSource);
-                    if (inserted > 0) {
-                        aeSlot.extractItem(0, GTMath.saturatedCast(inserted), false);
-                    } else {
-                        // 如果节点离线，则将物品扔到主世界中
-                        ItemStack sourceStack = aeSlot.extractItem(0, GTMath.saturatedCast(total), true);
-                        Level level = this.coverHolder.getLevel();
-                        BlockPos pos = this.coverHolder.getPos();
-                        ItemEntity itemEntity = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), sourceStack);
-                        itemEntity.setDeltaMovement(0, 0.1, 0);
-                        itemEntity.setPickUpDelay(10);
-                        level.addFreshEntity(itemEntity);
-                        aeSlot.extractItem(0, GTMath.saturatedCast(total), false);
-                    }
+        super.onRemoved();
+        MEStorage networkInv = this.getMachine().getMainNode().getGrid().getStorageService().getInventory();
+        for (ExportOnlyAEItemSlot aeSlot : this.aeItemHandler.getInventory()) {
+            // return item to AE network
+            GenericStack stock = aeSlot.getStock();
+            if(stock != null) {
+                long total = stock.amount();
+                long inserted = networkInv.insert(stock.what(), stock.amount(), Actionable.MODULATE,
+                        this.actionSource);
+                if (inserted > 0) {
+                    aeSlot.extractItem(0, GTMath.saturatedCast(inserted), false);
+                } else {
+                    aeSlot.extractItem(0, GTMath.saturatedCast(total), false);
                 }
             }
         }
-
         if (subscription != null) {
             subscription.unsubscribe();
         }
-        // 先执行物品回退，否则会因为节点离线导致物品无法正确的回到ME库存中
-        super.onRemoved();
     }
 
-    public CoverSlot getItemFilter() {
-        if (coverSlot == null) {
-                coverSlot = CoverSlot.loadSlot(attachItem);
-            if (coverHolder instanceof MachineCoverContainer mcc) {
-                var machine = MetaMachine.getMachine(mcc.getLevel(), mcc.getPos());
-                if (machine != null) {
-                    coverSlot.setMachine(machine);
-                    coverSlot.setCover(this);
-                    this.holder = (AESimpleTieredMachine) machine;
-                }
-            }
-        }
-        return coverSlot;
-    }
 
 
     @Override
@@ -250,15 +214,12 @@ public class MEInputBusCover extends MECover implements IControllable, IUICover,
                 "gtceu.gui.me_network.offline"));
 
         // Config slots
-//        group.addWidget(new AEItemCoverConfigWidget(3, 20, this.aeItemHandler));
-        group.addWidget(getItemFilter().openConfigurator(62, 25));
+        group.addWidget(new AEItemCoverConfigWidget(3, 20, this.aeItemHandler));
+
         return group;
     }
 
     private AESimpleTieredMachine getMachine() {
-        if (this.holder != null) {
-            return this.holder;
-        }
         return (AESimpleTieredMachine) ((MachineCoverContainer) coverHolder).getMachine();
     }
 
@@ -278,7 +239,7 @@ public class MEInputBusCover extends MECover implements IControllable, IUICover,
         for (ExportOnlyAEItemSlot aeSlot : this.aeItemHandler.getInventory()) {
 
             GenericStack stock = aeSlot.getStock();
-            if (stock != null) {
+            if(stock != null) {
                 ItemStack sourceStack = aeSlot.extractItem(0, GTMath.saturatedCast(itemsLeftToTransfer), true);
 
                 if (sourceStack.isEmpty()) {
@@ -337,8 +298,8 @@ public class MEInputBusCover extends MECover implements IControllable, IUICover,
                     "gtceu.gui.me_network.offline"));
 
             // Config slots
-//            group.addWidget(new AEItemCoverConfigWidget(3, 20, aeItemHandler));
-            group.addWidget(getItemFilter().openConfigurator(62, 25));
+            group.addWidget(new AEItemCoverConfigWidget(3, 20, aeItemHandler));
+
             return group;
         }
     }

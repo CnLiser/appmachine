@@ -35,8 +35,6 @@ public abstract class MECover extends CoverBehavior {
 
     protected final IActionSource actionSource;
 
-    protected AESimpleTieredMachine holder;
-
 
     public MECover(CoverDefinition definition, ICoverable coverHolder, Direction attachedSide) {
         super(definition, coverHolder, attachedSide);
