@@ -1,4 +1,4 @@
-package com.liser.appmachine.api.machine.gui.widget;
+package com.liser.appmachine.api.gui.widget;
 
 import appeng.api.stacks.GenericStack;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;

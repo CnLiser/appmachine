@@ -1,10 +1,10 @@
-package com.liser.appmachine.api.machine.gui.widget;
+package com.liser.appmachine.api.gui.widget;
 
 import appeng.api.stacks.GenericStack;
-import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemList;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemSlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlot;
-import com.liser.appmachine.api.machine.gui.widget.slot.AEItemConfigSlotWidget;
+import com.liser.appmachine.api.cover.slot.ExportOnlyAEItemList;
+import com.liser.appmachine.api.gui.widget.slot.AEItemConfigSlotWidget;
 
 public class AEItemConfigWidget extends ConfigWidget {
 
@@ -26,6 +26,11 @@ public class AEItemConfigWidget extends ConfigWidget {
             line = index / 8;
             this.addWidget(new AEItemConfigSlotWidget((index - line * 8) * 18, line * (18 * 2 + 2), this, index));
         }
+    }
+
+    @Override
+    public void setChangeListener(Runnable changeListener) {
+        super.setChangeListener(changeListener);
     }
 
     public boolean hasStackInConfig(GenericStack stack) {

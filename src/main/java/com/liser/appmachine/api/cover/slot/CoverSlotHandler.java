@@ -2,12 +2,13 @@ package com.liser.appmachine.api.cover.slot;
 
 import com.gregtechceu.gtceu.GTCEu;
 import com.gregtechceu.gtceu.api.cover.CoverBehavior;
-import com.gregtechceu.gtceu.api.cover.filter.FilterHandler;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 import com.gregtechceu.gtceu.api.machine.MachineCoverContainer;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
+import com.liser.appmachine.api.cover.MEInputBusCover;
+import com.liser.appmachine.api.cover.trait.MECover;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
@@ -31,6 +32,10 @@ public abstract class CoverSlotHandler<T, F extends Slot<T, F>> implements IEnha
 
     private final IEnhancedManaged container;
 
+    public final static int LOADED_ID = 1000;
+    public final static int REMOVE_ID = 1100;
+    public final static int UPDATE_ID = 1200;
+
     @Persisted
     @DescSynced
     @Getter
@@ -40,9 +45,12 @@ public abstract class CoverSlotHandler<T, F extends Slot<T, F>> implements IEnha
     private @Nullable CustomItemStackHandler coverSlot;
     private @Nullable WidgetGroup filterGroup;
 
-    private @NotNull Consumer<F> onSlotLoaded = (filter) -> {};
-    private @NotNull Consumer<F> onSlotRemoved = (filter) -> {};
-    private @NotNull Consumer<F> onSlotUpdated = (filter) -> {};
+    private @NotNull Consumer<F> onSlotLoaded = (slot) -> {
+    };
+    private @NotNull Consumer<F> onSlotRemoved = (slot) -> {
+    };
+    private @NotNull Consumer<F> onSlotUpdated = (slot) -> {
+    };
 
     public CoverSlotHandler(IEnhancedManaged container) {
         this.container = container;
@@ -56,7 +64,8 @@ public abstract class CoverSlotHandler<T, F extends Slot<T, F>> implements IEnha
 
     //////////////////////////////////
     // ***** PUBLIC API ******//
-    //////////////////////////////////
+
+    /// ///////////////////////////////
 
     public Widget createCoverSlotUI(int xPos, int yPos) {
         return new SlotWidget(getCoverSlot(), 0, xPos, yPos)
@@ -93,7 +102,8 @@ public abstract class CoverSlotHandler<T, F extends Slot<T, F>> implements IEnha
 
     ///////////////////////////////////////
     // ***** FILTER HANDLING ******//
-    ///////////////////////////////////////
+
+    /// ////////////////////////////////////
     private CustomItemStackHandler getCoverSlot() {
         if (this.coverSlot == null) {
             this.coverSlot = new CustomItemStackHandler(this.slotItem) {
@@ -110,6 +120,15 @@ public abstract class CoverSlotHandler<T, F extends Slot<T, F>> implements IEnha
         return this.coverSlot;
     }
 
+
+    public Widget createFilterConfigUI(int xPos, int yPos, int width, int height) {
+        this.filterGroup = new WidgetGroup(xPos, yPos, width, height);
+        if (!this.slotItem.isEmpty()) {
+            this.filterGroup.addWidget(getSlot().openConfigurator(3, 20));
+        }
+        return this.filterGroup;
+    }
+
     private void updateSlot() {
         var filterContainer = getCoverSlot();
 
@@ -122,8 +141,8 @@ public abstract class CoverSlotHandler<T, F extends Slot<T, F>> implements IEnha
         this.slotItem = filterContainer.getStackInSlot(0);
 
         if (this.slot != null) {
-            this.slot = null;
             this.onSlotRemoved.accept(this.slot);
+            this.slot = null;
         }
 
         loadSlotFromItem();
@@ -133,10 +152,11 @@ public abstract class CoverSlotHandler<T, F extends Slot<T, F>> implements IEnha
         if (!this.slotItem.isEmpty()) {
             this.slot = loadSlot(this.slotItem);
             slot.setOnUpdated(this.onSlotUpdated);
-            if(container instanceof CoverBehavior cover &&
+            if (container instanceof CoverBehavior cover &&
                     cover.coverHolder instanceof MachineCoverContainer mcc) {
                 var machine = MetaMachine.getMachine(mcc.getLevel(), mcc.getPos());
                 slot.setMachine(machine);
+                slot.setCover((MECover) cover);
             }
 
             this.onSlotLoaded.accept(this.slot);
@@ -157,7 +177,7 @@ public abstract class CoverSlotHandler<T, F extends Slot<T, F>> implements IEnha
 
     //////////////////////////////////////
     // ***** LDLib SyncData ******//
-    //////////////////////////////////////
+    /// ///////////////////////////////////
 
     public static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(CoverSlotHandler.class);
 
@@ -178,4 +198,5 @@ public abstract class CoverSlotHandler<T, F extends Slot<T, F>> implements IEnha
     public void scheduleRenderUpdate() {
         this.container.scheduleRenderUpdate();
     }
+
 }

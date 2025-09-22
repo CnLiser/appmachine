@@ -1,4 +1,4 @@
-package com.liser.appmachine.api.machine.gui.widget.slot;
+package com.liser.appmachine.api.gui.widget.slot;
 
 import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.GenericStack;
@@ -6,7 +6,7 @@ import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.misc.IGhostItemTarget;
 import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAESlot;
 import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlot;
-import com.liser.appmachine.api.machine.gui.widget.ConfigWidget;
+import com.liser.appmachine.api.gui.widget.ConfigWidget;
 import com.lowdragmc.lowdraglib.gui.util.TextFormattingUtil;
 import com.lowdragmc.lowdraglib.utils.Position;
 import com.lowdragmc.lowdraglib.utils.Size;
@@ -161,6 +161,10 @@ public class AEItemConfigSlotWidget extends AEConfigSlotWidget implements IGhost
                 slot.setStock(stack1.amount() == 0 ? null : stack1);
                 writeUpdateInfo(PICK_UP_ID, buf -> {});
             }
+        }
+        Runnable changeListener = this.parentWidget.getChangeListener();
+        if (changeListener != null) {
+            changeListener.run();
         }
     }
 

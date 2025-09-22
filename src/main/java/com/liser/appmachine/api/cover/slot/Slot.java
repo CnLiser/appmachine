@@ -28,4 +28,6 @@ public interface Slot<T, S extends Slot<T, S>> extends Predicate<T> {
     void setMachine(MetaMachine machine);
 
     void setCover(MECover cover);
+
+    void update();
 }

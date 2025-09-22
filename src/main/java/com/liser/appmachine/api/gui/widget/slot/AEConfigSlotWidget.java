@@ -1,8 +1,8 @@
-package com.liser.appmachine.api.machine.gui.widget.slot;
+package com.liser.appmachine.api.gui.widget.slot;
 
 import appeng.api.stacks.GenericStack;
 import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlot;
-import com.liser.appmachine.api.machine.gui.widget.ConfigWidget;
+import com.liser.appmachine.api.gui.widget.ConfigWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.utils.Position;
 import com.lowdragmc.lowdraglib.utils.Size;

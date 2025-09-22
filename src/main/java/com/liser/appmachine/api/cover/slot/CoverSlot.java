@@ -1,5 +1,6 @@
 package com.liser.appmachine.api.cover.slot;
 
+import appeng.api.networking.IManagedGridNode;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.liser.appmachine.api.cover.trait.MECover;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
@@ -22,6 +23,12 @@ public interface CoverSlot extends Slot<ItemStack, CoverSlot> {
     }
 
     int testItemCount(ItemStack itemStack);
+
+    default void onLoad() {};
+
+    default void onRemove(IManagedGridNode mainNode) {};
+
+    default void onUpdate() {};
 
     default boolean supportsAmounts() {
         return !isBlackList();
@@ -61,6 +68,11 @@ public interface CoverSlot extends Slot<ItemStack, CoverSlot> {
 
         @Override
         public void setCover(MECover cover) {
+            throw new NotImplementedException("Not available for empty cover slots");
+        }
+
+        @Override
+        public void update() {
             throw new NotImplementedException("Not available for empty cover slots");
         }
     };

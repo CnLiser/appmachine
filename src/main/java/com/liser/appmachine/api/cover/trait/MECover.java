@@ -5,6 +5,7 @@ import appeng.api.networking.security.IActionSource;
 import com.gregtechceu.gtceu.api.capability.ICoverable;
 import com.gregtechceu.gtceu.api.cover.CoverBehavior;
 import com.gregtechceu.gtceu.api.cover.CoverDefinition;
+import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.MachineCoverContainer;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.integration.ae2.machine.feature.IGridConnectedMachine;
@@ -16,7 +17,9 @@ import lombok.Setter;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
@@ -33,9 +36,11 @@ public abstract class MECover extends CoverBehavior {
     @Setter
     private boolean workingEnabled = true;
 
+    @Getter
     protected final IActionSource actionSource;
 
     protected AESimpleTieredMachine holder;
+
 
 
     public MECover(CoverDefinition definition, ICoverable coverHolder, Direction attachedSide) {
@@ -45,13 +50,18 @@ public abstract class MECover extends CoverBehavior {
         }else {
             this.actionSource = null;
         }
+
     }
 
     public IManagedGridNode getMainNode() {
         if(!(coverHolder instanceof MachineCoverContainer machineCoverContainer)) return null;
         MetaMachine machine = machineCoverContainer.getMachine();
-        if(!(machine instanceof IGridConnectedMachine)) return null;
-        return ((IGridConnectedMachine) machine).getMainNode();
+        if(!(machine instanceof AESimpleTieredMachine me)) return null;
+        return me.getMainNode();
+    }
+
+    protected boolean isSubscriptionActive() {
+        return isWorkingEnabled();
     }
 
     @Override
@@ -82,13 +92,20 @@ public abstract class MECover extends CoverBehavior {
         }
     }
 
+    protected boolean updateMEStatus() {
+        return getMachine().updateMEStatus();
+    }
+
+    public boolean shouldSyncME() {
+        return getMachine().shouldSyncME();
+    }
+
     public boolean isOnline() {
         return getMachine().isOnline();
     }
 
     @Override
     public void onLoad() {
-        super.onLoad();
         if(coverHolder instanceof MachineCoverContainer) {
             MetaMachine machine = ((MachineCoverContainer) coverHolder).getMachine();
 
@@ -104,7 +121,7 @@ public abstract class MECover extends CoverBehavior {
         getMachine().onCoverRemove();
     }
 
-    private AESimpleTieredMachine getMachine() {
+    protected AESimpleTieredMachine getMachine() {
         return (AESimpleTieredMachine) ((MachineCoverContainer) coverHolder).getMachine();
     }
 
@@ -115,4 +132,7 @@ public abstract class MECover extends CoverBehavior {
         return MANAGED_FIELD_HOLDER;
     }
 
+    public @Nullable IItemHandlerModifiable getOwnItemHandler() {
+        return coverHolder.getItemHandlerCap(attachedSide, false);
+    }
 }

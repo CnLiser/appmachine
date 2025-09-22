@@ -1,8 +1,8 @@
-package com.liser.appmachine.api.machine.gui.widget;
+package com.liser.appmachine.api.gui.widget;
 
 import appeng.api.stacks.GenericStack;
-import com.gregtechceu.gtceu.integration.ae2.gui.widget.slot.AEConfigSlotWidget;
 import com.gregtechceu.gtceu.integration.ae2.slot.IConfigurableSlot;
+import com.liser.appmachine.api.gui.widget.slot.AEConfigSlotWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.utils.Position;
@@ -10,6 +10,7 @@ import com.lowdragmc.lowdraglib.utils.Size;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -22,6 +23,10 @@ public abstract class ConfigWidget extends WidgetGroup {
     protected IConfigurableSlot[] displayList;
     protected AmountSetWidget amountSetWidget;
     protected final static int UPDATE_ID = 1000;
+
+    @Getter
+    @Setter
+    protected Runnable changeListener;
 
     @Getter
     protected final boolean isStocking;
