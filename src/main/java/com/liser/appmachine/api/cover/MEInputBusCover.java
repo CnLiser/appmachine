@@ -179,8 +179,7 @@ public class MEInputBusCover extends MECover implements IControllable, IUICover,
                     "gtceu.gui.me_network.offline"));
 
             // Config slots
-//            group.addWidget(new AEItemCoverConfigWidget(3, 20, aeItemHandler));
-            group.addWidget(getItemFilter().openConfigurator(62, 25));
+            group.addWidget(getItemFilter().openConfigurator(1, 20));
             return group;
         }
     }

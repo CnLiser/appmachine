@@ -190,8 +190,8 @@ public class MEInputBusSlot implements CoverSlot {
     }
 
     public WidgetGroup openConfigurator(int x, int y) {
-        WidgetGroup group = new WidgetGroup(x, y, 146, 76); // 80 55
-        AEItemConfigWidget aeItemConfigWidget = new AEItemConfigWidget(3, 10, this.aeItemHandler);
+        WidgetGroup group = new WidgetGroup(0, 0, 146, 98); // 80 55
+        AEItemConfigWidget aeItemConfigWidget = new AEItemConfigWidget(x, y, this.aeItemHandler);
         aeItemConfigWidget.setChangeListener(() -> {
             onUpdated.accept(this);
         });
