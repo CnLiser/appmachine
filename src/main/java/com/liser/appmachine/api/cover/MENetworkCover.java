@@ -38,7 +38,7 @@ public class MENetworkCover extends MECover implements IUICover {
     protected static final ManagedFieldHolder MANAGED_FIELD_HOLDER = new ManagedFieldHolder(MENetworkCover.class,
             MECover.MANAGED_FIELD_HOLDER);
 
-    protected final static int CONFIG_SIZE = 9;
+    protected final static int CONFIG_SIZE = 8;
 
     @Persisted
     @Getter
@@ -85,7 +85,7 @@ public class MENetworkCover extends MECover implements IUICover {
         for (int i = 0; i < coverSlotHandler.length; i++) {
             CoverSlotHandler handler = coverSlotHandler[i];
             group.addWidget(handler.createCoverSlotUI((i * 18), 20));
-            group.addWidget(handler.createFilterConfigUI(6, 34, 0, 96));
+            group.addWidget(handler.createFilterConfigUI(0, 34, 0, 96));
         }
 
         buildAdditionalUI(group);

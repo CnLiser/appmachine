@@ -124,7 +124,7 @@ public abstract class CoverSlotHandler<T, F extends Slot<T, F>> implements IEnha
     public Widget createFilterConfigUI(int xPos, int yPos, int width, int height) {
         this.filterGroup = new WidgetGroup(xPos, yPos, width, height);
         if (!this.slotItem.isEmpty()) {
-            this.filterGroup.addWidget(getSlot().openConfigurator(3, 18));
+            this.filterGroup.addWidget(getSlot().openConfigurator(0, 18));
         }
         return this.filterGroup;
     }
@@ -171,7 +171,7 @@ public abstract class CoverSlotHandler<T, F extends Slot<T, F>> implements IEnha
         this.filterGroup.clearAllWidgets();
 
         if (!this.slotItem.isEmpty() && this.slot != null) {
-            this.filterGroup.addWidget(this.slot.openConfigurator(3, 18));
+            this.filterGroup.addWidget(this.slot.openConfigurator(0, 18));
         }
     }
 

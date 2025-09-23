@@ -170,6 +170,7 @@ public class MEInputBusSlot implements CoverSlot {
                 this.aeItemHandler.setChangeListener(() -> {
                     onUpdated.accept(this);
                 });
+                saveSlot();
             }
         }
     }
