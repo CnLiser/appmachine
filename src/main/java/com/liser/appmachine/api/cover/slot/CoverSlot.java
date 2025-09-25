@@ -18,6 +18,9 @@ public interface CoverSlot extends Slot<ItemStack, CoverSlot> {
 
     Map<ItemLike, Function<ItemStack, CoverSlot>> SLOTS = new HashMap<>();
 
+    public static final int TYPE_MACHINE = 1000;
+    public static final int TYPE_SLOT = 1001;
+
     static CoverSlot loadSlot(ItemStack itemStack) {
         return SLOTS.get(itemStack.getItem()).apply(itemStack);
     }
@@ -26,7 +29,7 @@ public interface CoverSlot extends Slot<ItemStack, CoverSlot> {
 
     default void onLoad() {};
 
-    default void onRemove(IManagedGridNode mainNode) {};
+    default void onRemove(IManagedGridNode mainNode, int type) {};
 
     default void onUpdate() {};
 

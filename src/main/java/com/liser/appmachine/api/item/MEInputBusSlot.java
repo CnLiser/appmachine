@@ -16,7 +16,6 @@ import com.liser.appmachine.api.cover.slot.ExportOnlyAEItemList;
 import com.liser.appmachine.api.cover.trait.MECover;
 import com.liser.appmachine.api.gui.widget.AEItemConfigWidget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import lombok.Getter;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -27,9 +26,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Consumer;
@@ -100,33 +97,40 @@ public class MEInputBusSlot implements CoverSlot {
     }
 
     @Override
-    public void onRemove(IManagedGridNode mainNode) {
+    public void onRemove(IManagedGridNode mainNode, int type) {
+        System.out.println("组件移除----------");
         if (subscriptionHandler != null) {
             subscriptionHandler.unsubscribe();
         }
-        // 作为插槽时，无法拿到机器的AE节点
-        IGrid grid = mainNode.getGrid();
-        for (ExportOnlyAEItemSlot aeSlot : this.aeItemHandler.getInventory()) {
-            // return item to AE network
-            GenericStack stock = aeSlot.getStock();
-            if (stock != null) {
-                if (grid == null) {
-                    outputItems(aeSlot);
-                }else {
-                    long inserted = grid.getStorageService().getInventory().insert(stock.what(), stock.amount(), Actionable.MODULATE,
-                            this.cover.getActionSource());
-                    if (inserted > 0) {
-                        aeSlot.extractItem(0, GTMath.saturatedCast(inserted), false);
-                    } else {
+
+        if (type == CoverSlot.TYPE_MACHINE) {
+            // 仅在作为机器覆盖板时进行回退，作为插槽组件时会导致意料之外呃错误
+            IGrid grid = mainNode.getGrid();
+            for (ExportOnlyAEItemSlot aeSlot : this.aeItemHandler.getInventory()) {
+                // return item to AE network
+                GenericStack stock = aeSlot.getStock();
+                if (stock != null) {
+                    if (grid == null) {
                         outputItems(aeSlot);
+                    } else {
+                        long inserted = grid.getStorageService().getInventory().insert(stock.what(), stock.amount(), Actionable.MODULATE,
+                                this.cover.getActionSource());
+                        if (inserted > 0) {
+                            aeSlot.extractItem(0, GTMath.saturatedCast(inserted), false);
+                        } else {
+                            outputItems(aeSlot);
+                        }
                     }
+                    aeSlot.setStock(null);
                 }
             }
         }
+
     }
 
     /**
      * 将物品扔到主世界中
+     *
      * @param aeSlot
      */
     protected void outputItems(ExportOnlyAEItemSlot aeSlot) {
@@ -212,6 +216,7 @@ public class MEInputBusSlot implements CoverSlot {
     @Override
     public void update() {
         if (!this.getCover().shouldSyncME()) return;
+        System.out.println("on update");
         this.syncME();
 
         long timer = this.getCoverHolder().getOffsetTimer();

@@ -1,34 +1,26 @@
 package com.liser.appmachine.api.cover;
 
-import appeng.api.networking.IGrid;
-import appeng.api.networking.IManagedGridNode;
 import com.gregtechceu.gtceu.api.capability.ICoverable;
 import com.gregtechceu.gtceu.api.cover.CoverDefinition;
 import com.gregtechceu.gtceu.api.cover.IUICover;
-import com.gregtechceu.gtceu.api.transfer.item.ItemHandlerDelegate;
 import com.liser.appmachine.api.cover.slot.CoverSlot;
 import com.liser.appmachine.api.cover.slot.CoverSlotHandler;
 import com.liser.appmachine.api.cover.slot.CoverSlotHandlers;
 import com.liser.appmachine.api.cover.trait.MECover;
 import com.liser.appmachine.api.gui.widget.TabsWidget;
-import com.lowdragmc.lowdraglib.gui.texture.ColorRectTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.Position;
-import com.lowdragmc.lowdraglib.utils.Size;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.beans.PropertyChangeSupport;
 import java.util.*;
 
 @ParametersAreNonnullByDefault
@@ -135,7 +127,7 @@ public class MENetworkCover extends MECover implements IUICover {
                 slot.onLoad();
                 break;
             case CoverSlotHandler.REMOVE_ID:
-                slot.onRemove(this.getMainNode());
+                slot.onRemove(this.getMainNode(), CoverSlot.TYPE_SLOT);
                 tabBar.attachRemoveTab(index);
                 break;
             case CoverSlotHandler.UPDATE_ID:
@@ -168,41 +160,4 @@ public class MENetworkCover extends MECover implements IUICover {
         return list;
     }
 
-
-    /////////////////////////////////////
-    // *** CAPABILITY OVERRIDE ***//
-    /// //////////////////////////////////
-
-    private CoverableItemHandlerWrapper itemHandlerWrapper;
-
-    @Nullable
-    @Override
-    public IItemHandlerModifiable getItemHandlerCap(@Nullable IItemHandlerModifiable defaultValue) {
-        if (defaultValue == null) {
-            return null;
-        }
-        if (itemHandlerWrapper == null || itemHandlerWrapper.delegate != defaultValue) {
-            this.itemHandlerWrapper = new CoverableItemHandlerWrapper(defaultValue);
-        }
-        return itemHandlerWrapper;
-    }
-
-    private class CoverableItemHandlerWrapper extends ItemHandlerDelegate {
-
-        public CoverableItemHandlerWrapper(IItemHandlerModifiable delegate) {
-            super(delegate);
-        }
-
-        @NotNull
-        @Override
-        public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            return super.insertItem(slot, stack, simulate);
-        }
-
-        @NotNull
-        @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return super.extractItem(slot, amount, simulate);
-        }
-    }
 }

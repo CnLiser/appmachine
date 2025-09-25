@@ -1,14 +1,9 @@
 package com.liser.appmachine.api.cover;
 
-import appeng.api.config.Actionable;
-import appeng.api.networking.IGrid;
 import appeng.api.networking.IManagedGridNode;
-import appeng.api.stacks.GenericStack;
-import appeng.api.storage.MEStorage;
 import com.gregtechceu.gtceu.api.capability.IControllable;
 import com.gregtechceu.gtceu.api.capability.ICoverable;
 import com.gregtechceu.gtceu.api.capability.recipe.IO;
-import com.gregtechceu.gtceu.api.cover.CoverBehavior;
 import com.gregtechceu.gtceu.api.cover.CoverDefinition;
 import com.gregtechceu.gtceu.api.cover.IUICover;
 import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfigurator;
@@ -16,14 +11,9 @@ import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.MachineCoverContainer;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
-import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
-import com.gregtechceu.gtceu.integration.ae2.slot.ExportOnlyAEItemSlot;
-import com.gregtechceu.gtceu.utils.GTMath;
 import com.liser.appmachine.api.cover.slot.CoverSlot;
-import com.liser.appmachine.api.cover.slot.ExportOnlyAEItemList;
 import com.liser.appmachine.api.cover.trait.CoverBehaviorConfigurator;
 import com.liser.appmachine.api.cover.trait.MECover;
-import com.liser.appmachine.api.item.MEInputBusSlot;
 import com.liser.appmachine.api.machine.gui.GuiTextures;
 import com.liser.appmachine.api.machine.trait.AESimpleTieredMachine;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
@@ -35,15 +25,8 @@ import com.lowdragmc.lowdraglib.syncdata.field.ManagedFieldHolder;
 import com.lowdragmc.lowdraglib.utils.Position;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -109,7 +92,7 @@ public class MEInputBusCover extends MECover implements IControllable, IUICover,
 
     @Override
     public void onRemoved() {
-        this.getItemFilter().onRemove(this.getMainNode());
+        this.getItemFilter().onRemove(this.getMainNode(), CoverSlot.TYPE_MACHINE);
         if (subscription != null) {
             subscription.unsubscribe();
         }
