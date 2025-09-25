@@ -2,8 +2,9 @@
   "tab.appmachine.gtceu.covers.title": "gtceu | more covers",
   "tab.appmachine.gtceu.machines.title": "gtceu | more machines",
   "item.appmachine.me_input_bus_cover": "ME input bus cover",
-  "item.appmachine.me_input_bus_cover.tooltip": "§7cover can connect the machine coverage to the ME network。",
+  "item.appmachine.me_input_bus_cover.tooltip": "§7cover can connect the machine coverage to the ME network.",
   "item.appmachine.me_input_bus_cover.tooltip.item_transfer_rate": "§bFill items into machine",
   "item.appmachine.me_network_cover": "ME network cover",
-  "item.appmachine.me_network_cover.tooltip": "§7cover can connect the machine coverage to the ME network。"
+  "item.appmachine.me_network_cover.tooltip": "§7cover can connect the machine coverage to the ME network.",
+  "item.appmachine.me_network_cover.tooltip.item_transfer_rate": "§7Eight plug-in slots are provided, allowing the ME series cover board to be installed as a plug-in."
 }

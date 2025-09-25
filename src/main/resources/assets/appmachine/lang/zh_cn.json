@@ -3,5 +3,8 @@
   "tab.appmachine.gtceu.machines.title": "格雷科技 | 更多机器",
   "item.appmachine.me_input_bus_cover": "ME输入总线覆盖板",
   "item.appmachine.me_input_bus_cover.tooltip": "用作§f覆盖板§7时可以将机器覆盖面接入ME网络中。",
-  "item.appmachine.me_input_bus_cover.tooltip.item_transfer_rate": "§b将标记的物品§f传入机器中"
+  "item.appmachine.me_input_bus_cover.tooltip.item_transfer_rate": "§b将标记的物品§f传入机器中",
+  "item.appmachine.me_network_cover": "ME网络覆盖板",
+  "item.appmachine.me_network_cover.tooltip": "用作§f覆盖板§7时可以将机器覆盖面接入ME网络中。",
+  "item.appmachine.me_network_cover.tooltip.item_transfer_rate": "§提供8个插件插槽§f可以将§fME系列§7覆盖板当做插件安装。"
 }

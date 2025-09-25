@@ -32,6 +32,7 @@ public class CoverItems {
             .onRegister(attach(new CoverPlaceBehavior(Covers.ME_NETWORK_COVER)))
             .onRegister(attach(new TooltipBehavior(lines -> {
                 lines.add(Component.translatable("item.appmachine.me_network_cover.tooltip"));
+                lines.add(Component.translatable("item.appmachine.me_network_cover.tooltip.item_transfer_rate"));
             })))
             .register();
 

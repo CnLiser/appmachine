@@ -216,7 +216,6 @@ public class MEInputBusSlot implements CoverSlot {
     @Override
     public void update() {
         if (!this.getCover().shouldSyncME()) return;
-        System.out.println("on update");
         this.syncME();
 
         long timer = this.getCoverHolder().getOffsetTimer();
