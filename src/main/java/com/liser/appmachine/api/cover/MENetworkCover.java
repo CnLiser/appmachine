@@ -92,7 +92,7 @@ public class MENetworkCover extends MECover implements IUICover {
 
     @Override
     public Widget createUIWidget() {
-        WidgetGroup mainPage = new WidgetGroup(0, 0, 18 * 8 + 25, 130);
+        WidgetGroup mainPage = new WidgetGroup(0, 0, 18 * 8 + 3, 130);
 //        mainPage.clearAllWidgets();
         mainPage.addWidget(tabBar);
         // ME Network status
