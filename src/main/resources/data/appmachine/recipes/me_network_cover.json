@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xab",
+    "   ",
+    "   "
+  ],
+  "key": {
+    "x": {
+      "item": "ae2:interface"
+    },
+    "a": {
+      "item": "gtceu:item_filter"
+    },
+    "b": {
+      "item": "gtceu:item_detector_cover"
+    }
+  },
+  "result": {
+    "item": "appmachine:me_network_cover",
+    "count": 1
+  }
+}
