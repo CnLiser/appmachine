@@ -63,7 +63,31 @@ public class TabsWidget extends Widget {
 
     public void attachRemoveTab(int index) {
         subTabs.set(index, emptyPage);
-        onTabClick.accept(index, selectedTab);
+        int i = index;
+        int j = index;
+
+        for (int k = 0; k < subTabs.size(); k++) {
+            if (i < subTabs.size()) {
+                if (!isEmpty(i)) {
+                    attachSelectTab(i);
+                    break;
+                }
+            }
+
+            if (j > -1) {
+                if (!isEmpty(j)) {
+                    attachSelectTab(j);
+                    break;
+                }
+            }
+
+            if (j < 0 && i >= subTabs.size()) {
+                break;
+            }
+
+            i++;
+            j--;
+        }
     }
 
     public void attachSelectTab(int index) {
