@@ -52,6 +52,7 @@ public class MENetworkCover extends MECover implements IUICover {
 
     protected TabsWidget tabBar;
     @Persisted
+    @DescSynced
     protected int tabBarIndex = 0;
     protected boolean isLoad = false;
 
@@ -82,18 +83,17 @@ public class MENetworkCover extends MECover implements IUICover {
     private void creteWidgetGroup() {
         tabBar = new TabsWidget((index, widget) -> {
             this.tabBarIndex = index;
-            this.currentPage = widget;
-            this.markAsDirty();
-            this.createUIWidget();
+            currentPage.clearAllWidgets();
+            currentPage.addWidget(widget);
         }, coverSlotHandler.length, 1, 40, 146, 10);
     }
 
-    protected Widget currentPage;
-    protected WidgetGroup mainPage = new WidgetGroup(new Position(0, 0), new Size(146, 130));
+    protected WidgetGroup currentPage = new WidgetGroup(0, 0, 0, 0);
 
     @Override
     public Widget createUIWidget() {
-        mainPage.clearAllWidgets();
+        WidgetGroup mainPage = new WidgetGroup(0, 0, 18 * 8 + 25, 130);
+//        mainPage.clearAllWidgets();
         mainPage.addWidget(tabBar);
         // ME Network status
         mainPage.addWidget(new LabelWidget(3, 5, () -> isOnline() ?
@@ -110,6 +110,10 @@ public class MENetworkCover extends MECover implements IUICover {
 
         mainPage.addWidget(currentPage);
         buildAdditionalUI(mainPage);
+        if(!this.isLoad) {
+            this.tabBar.attachSelectTab(tabBarIndex);
+            this.isLoad = true;
+        }
 
         return mainPage;
     }

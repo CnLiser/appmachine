@@ -49,7 +49,6 @@ public class MEInputBusSlot implements CoverSlot {
     protected Consumer<CoverSlot> onUpdated = coverSlot -> itemWriter.accept(coverSlot);
 
     private MetaMachine holder;
-    @Persisted
     @Getter
     private MECover cover;
 
