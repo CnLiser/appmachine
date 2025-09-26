@@ -98,7 +98,6 @@ public class MEInputBusSlot implements CoverSlot {
 
     @Override
     public void onRemove(IManagedGridNode mainNode, int type) {
-        System.out.println("组件移除----------");
         if (subscriptionHandler != null) {
             subscriptionHandler.unsubscribe();
         }
