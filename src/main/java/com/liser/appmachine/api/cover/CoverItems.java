@@ -6,6 +6,7 @@ import com.gregtechceu.gtceu.common.item.CoverPlaceBehavior;
 import com.gregtechceu.gtceu.common.item.TooltipBehavior;
 import com.liser.appmachine.api.item.CoverSlotBehaviour;
 import com.liser.appmachine.api.item.MEInputBusSlot;
+import com.liser.appmachine.api.item.MEPatternProviderSlot;
 import com.liser.appmachine.registry.AMCreativeModeTabs;
 import com.liser.appmachine.registry.AMRegistries;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -35,6 +36,16 @@ public class CoverItems {
                 lines.add(Component.translatable("item.appmachine.me_network_cover.tooltip.item_transfer_rate"));
             })))
             .register();
+
+    public static ItemEntry<ComponentItem> ME_PATTERN_PROVIDER_COVER = AMRegistries.REGISTRATE.item("me_pattern_provider_cover", ComponentItem::create)
+            .lang("me pattern provider cover")
+            .onRegister(attach(new CoverSlotBehaviour(MEPatternProviderSlot::loadCoverSlot), new CoverPlaceBehavior(Covers.ME_PATTERN_PROVIDER_COVER)))
+            .onRegister(attach(new TooltipBehavior(lines -> {
+                lines.add(Component.translatable("item.appmachine.me_network_cover.tooltip"));
+                lines.add(Component.translatable("item.appmachine.me_network_cover.tooltip.item_transfer_rate"));
+            })))
+            .register();
+
 
     public static <T extends ComponentItem> NonNullConsumer<T> attach(IItemComponent... components) {
         return item -> item.attachComponents(components);

@@ -17,6 +17,7 @@ public class Covers {
 
     public final static CoverDefinition ME_INPUT_BUS_COVER = register("me_input_bus_cover", MEInputBusCover::new);
     public final static CoverDefinition ME_NETWORK_COVER = register("me_network_cover", MENetworkCover::new);
+    public final static CoverDefinition ME_PATTERN_PROVIDER_COVER = register("me_pattern_provider_cover", MEPatternProviderCover::new);
 
 
     private static CoverDefinition register(String id, CoverDefinition.CoverBehaviourProvider behaviorCreator) {

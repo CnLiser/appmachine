@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "appmachine:item/me_pattern_provider_cover"
+  }
+}

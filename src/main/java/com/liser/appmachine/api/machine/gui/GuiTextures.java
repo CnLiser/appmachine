@@ -9,4 +9,8 @@ public class GuiTextures {
     public static final ResourceTexture ME_INPUT_BUS_ICON = new ResourceTexture(
             "appmachine:textures/item/me_input_bus_cover.png");
 
+    public static final ResourceTexture ME_PATTERN_PROVIDER_ICON = new ResourceTexture(
+            "appmachine:textures/item/me_pattern_provider_cover.png");
+
+
 }

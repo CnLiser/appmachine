@@ -10,7 +10,6 @@ import com.gregtechceu.gtceu.api.gui.fancy.IFancyConfigurator;
 import com.gregtechceu.gtceu.api.machine.ConditionalSubscriptionHandler;
 import com.gregtechceu.gtceu.api.machine.MachineCoverContainer;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
-import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.liser.appmachine.api.cover.slot.CoverSlot;
 import com.liser.appmachine.api.cover.trait.CoverBehaviorConfigurator;
 import com.liser.appmachine.api.cover.trait.MECover;
@@ -43,7 +42,6 @@ public class MEInputBusCover extends MECover implements IControllable, IUICover,
     @Setter
     private boolean workingEnabled = true;
     protected final IO io;
-    protected TickableSubscription subscription;
     public final int maxItemTransferRate;
 
     @Persisted
@@ -93,9 +91,6 @@ public class MEInputBusCover extends MECover implements IControllable, IUICover,
     @Override
     public void onRemoved() {
         this.getItemFilter().onRemove(this.getMainNode(), CoverSlot.TYPE_MACHINE);
-        if (subscription != null) {
-            subscription.unsubscribe();
-        }
         // 先执行物品回退，否则会因为节点离线导致物品无法正确的回到ME库存中
         super.onRemoved();
         subscriptionHandler.unsubscribe();
