@@ -97,4 +97,8 @@ public class GridMachineNodeHolder extends MachineTrait {
         this.mainNode.deserializeNBT(tag);
         return this.mainNode;
     }
+
+    public void setIdlePowerUsage(double usagePerTick) {
+        mainNode.setIdlePowerUsage(usagePerTick);
+    }
 }

@@ -3,6 +3,7 @@ package com.liser.appmachine.api.cover;
 import com.gregtechceu.gtceu.api.capability.ICoverable;
 import com.gregtechceu.gtceu.api.cover.CoverDefinition;
 import com.gregtechceu.gtceu.api.cover.IUICover;
+import com.gregtechceu.gtceu.config.ConfigHolder;
 import com.liser.appmachine.api.cover.slot.CoverSlot;
 import com.liser.appmachine.api.cover.slot.CoverSlotHandler;
 import com.liser.appmachine.api.cover.slot.CoverSlotHandlers;
@@ -102,7 +103,7 @@ public class MENetworkCover extends MECover implements IUICover {
 
         mainPage.addWidget(currentPage);
         buildAdditionalUI(mainPage);
-        if(!this.isLoad) {
+        if (!this.isLoad) {
             this.tabBar.attachSelectTab(tabBarIndex);
             this.isLoad = true;
         }
@@ -125,10 +126,12 @@ public class MENetworkCover extends MECover implements IUICover {
                     tabBar.attachSelectTab(tabBarIndex);
                 }
                 slot.onLoad();
+                updatePowerUsage();
                 break;
             case CoverSlotHandler.REMOVE_ID:
                 slot.onRemove(this.getMainNode(), CoverSlot.TYPE_SLOT);
                 tabBar.attachRemoveTab(index);
+                updatePowerUsage();
                 break;
             case CoverSlotHandler.UPDATE_ID:
                 slot.onUpdate();
@@ -158,6 +161,22 @@ public class MENetworkCover extends MECover implements IUICover {
             }
         }
         return list;
+    }
+
+    /**
+     * 重新计算AE电量消耗
+     */
+    protected void updatePowerUsage() {
+        int slotCount = 0;
+        for (CoverSlotHandler handler : coverSlotHandler) {
+            if (!handler.getSlotItem().isEmpty()) {
+                slotCount++;
+            }
+        }
+        System.out.println(slotCount);
+        double meHatchEnergyUsage = ConfigHolder.INSTANCE.compat.ae2.meHatchEnergyUsage;
+        double usagePerTick = meHatchEnergyUsage * slotCount + meHatchEnergyUsage;
+        this.getMainNode().setIdlePowerUsage(usagePerTick);
     }
 
 }
